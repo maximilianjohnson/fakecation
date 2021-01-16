@@ -1,4 +1,4 @@
-from flask import flask
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 import os
