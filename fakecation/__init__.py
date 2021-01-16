@@ -1,7 +1,7 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, g
 from flask_session import Session
 import os
+import sqlite3
 
 app = Flask(__name__)
 
@@ -9,7 +9,16 @@ app.config["SECRET_KEY"] = "hackthenorth2021"
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-app.config["SQLALCHEMY_DATA_URI"] = "sqlite:///" + os.path.join(basedir,"image_db.sqlite")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+dbpath = os.path.join(basedir,"image_db.sqlite")
 
-db = SQLAlchemy(app)
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(dbpath)
+    return db
+
+@app.teardown_appcontext
+def close_db(error):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
