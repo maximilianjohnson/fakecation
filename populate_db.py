@@ -24,3 +24,6 @@ if __name__ == "__main__":
 
             for url in urls:
                 insert_row(conn,lat,lon,country,number,gender,url)
+
+    with app.app_context():
+        close_db()
