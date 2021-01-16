@@ -1,5 +1,7 @@
-from fakecation import app, get_db, close_db
+from fakecation import *
 from flask import Flask, render_template, url_for, redirect, session
+import pandas as pd
+
 
 
 def calculate_distance(lat1, lon1, lat2, lon2):
@@ -20,8 +22,12 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
     distance = R * c
 
-def calculate_distances(lat, lon):
-    return 1
+def get_images(conn, lat, lon):
+
+    c = conn.cursor()
+
+    imgs_df = pd.read_sql_query("SELECT * FROM images WHERE latitude BETWEEN ? and ? AND longitude BETWEEN ? and ?", conn, params=(lat-10, lat+10, lon-10,lon+10))
+
 
 @app.route("/")
 def index():
@@ -30,4 +36,14 @@ def index():
 
 if __name__ == "__main__":
 
-    app.run(debug=True)
+    app.run()
+
+    with app.app_context():
+        conn = get_db()
+
+    create_table(conn)
+    insert_row(conn,100,125,20,2,"1,0","image123.jpg")
+
+    #get_images(get_db(),100, 100)
+    with app.app_context():
+        close_db()
