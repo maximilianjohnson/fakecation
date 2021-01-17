@@ -216,6 +216,7 @@ def delete_img():
 @app.route('/deepfake', methods=["POST"])
 def deep_fake():
     url = request.get_json()
+    swap_url = ""
     try:
         path = detect_face.deep_fake(url, './tmp/1/test_img')
         swap_url = upload_image(path)
