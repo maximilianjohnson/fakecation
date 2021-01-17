@@ -80,28 +80,20 @@ def overlay_face(rep_tri, tri, rep_img, img):
 
 
 
-def deep_fake(replace_url, face_url):
+def deep_fake(replace_url, face_path):
     img1 = "replace.jpg"
     img2 = "face.jpg"
 
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
     try:
         resp = req.urlopen(replace_url)
         image = np.asarray(bytearray(resp.read()), dtype = np.uint8)
         face_replace_image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     except Exception as e:
         print(e)
-        face_replace_image = cv2.imread('./model/test2.jpeg')
+        face_replace_image = cv2.imread(cur_dir +  '/test2.jpeg')
 
-    try:
-        resp = req.urlopen(face_url)
-        image = np.asarray(bytearray(resp.read()), dtype=np.uint8)
-        face_img = cv2.imdecode(image, cv2.IMREAD_COLOR)
-
-    except Exception as e:
-        print(e)
-        face_img = cv2.imread('./model/me.png')
-
-    show_images(face_replace_image, face_img)
+    face_img = cv2.imread(face_path, cv2.IMREAD_COLOR)
 
     image_rgb = cv2.cvtColor(face_replace_image, cv2.COLOR_BGR2RGB)
     face_rgb = cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB)
@@ -128,7 +120,7 @@ def deep_fake(replace_url, face_url):
 
     #show_images(image_gray, face_gray, "starting images")
 
-    haarcascade = "./model/haarcascade_frontalface_alt2.xml"
+    haarcascade = cur_dir + "/haarcascade_frontalface_alt2.xml"
 
     detector = cv2.CascadeClassifier(haarcascade)
 
@@ -152,7 +144,7 @@ def deep_fake(replace_url, face_url):
 
     #show_images(image_template, face_template, "faces")
 
-    LBFmodel = "./model/lbfmodel.yaml"
+    LBFmodel = cur_dir + "/lbfmodel.yaml"
 
     landmark_detector  = cv2.face.createFacemarkLBF()
     landmark_detector.loadModel(LBFmodel)
@@ -163,6 +155,15 @@ def deep_fake(replace_url, face_url):
 
     rep_hulls_img = rep_cropped.copy()
     hulls_img = face_cropped.copy()
+
+    for landmark in landmarks:
+        for (x,y) in landmark[0]:
+            cv2.circle(hulls_img, (x,y), 1, (255, 0, 0))
+    for landmark in landmarks_replace:
+        for (x,y) in landmark[0]:
+            cv2.circle(rep_hulls_img, (x,y), 1, (255, 0, 0))
+
+    #show_images(rep_hulls_img, hulls_img)
 
     #get hulls from facial landmarks
     face_hulls = []
@@ -175,7 +176,7 @@ def deep_fake(replace_url, face_url):
     for landmark in landmarks_replace:
         hull = cv2.convexHull(landmark[0], returnPoints = False)
         hull = np.array(hull, dtype=np.int32).squeeze()
-        replace_hulls.append(hull)
+        replace_hulls.append(hull) 
 
     rep_tri_img = rep_cropped.copy()
     tri_img = face_cropped.copy()
@@ -215,18 +216,29 @@ def deep_fake(replace_url, face_url):
 
     cv2.fillConvexPoly(mask, np.int32(landmarks_replace[0][0][face_hulls]), (255,255,255), 16, 0)
 
-    x,y = landmarks_replace[0][0][29]
-    center = (x,y)
+    points = landmarks_replace[0][0][replace_hulls[0]]
 
-    show_images(final, mask)
+    M = cv2.moments(points)
+    cX = int(M["m10"] / M["m00"])
+    cY = int(M["m01"] / M["m00"])
+
+    center = (cX, cY)
+
+    mask_copy = mask.copy()
+
+    cv2.circle(mask_copy, center, 1, (255,0,0))
+    
+
+    #show_images(final, mask_copy)
     output = cv2.seamlessClone(final, rep_original, mask, center, cv2.NORMAL_CLONE)
 
-    plt.imshow(output)
-    plt.show()
+    final_file = cur_dir + '/../fakecation/static/assets/images/masked_img.jpg'  
+    cv2.imwrite(final_file, cv2.cvtColor(output, cv2.COLOR_RGB2BGR))
+    return final_file
 
 
 if __name__ == '__main__':
     if(len(sys.argv) < 3 or len(sys.argv) > 3):
-        raise ValueError('need 2 url arguments')
-
-    #deep_fake(sys.argv[1], sys.argv[2])
+        deep_fake("","./me.png")
+    else:
+        deep_fake(sys.argv[1], sys.argv[2])
