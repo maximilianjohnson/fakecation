@@ -1,6 +1,10 @@
+var imageIndex = 0;
+
 document.body.onload = function main() {
+  sendBaseImage();
   updateInstagramImage();
   usernameSelector();
+
 
   var resetButton = document.querySelector("#reset-button");
   resetButton.addEventListener("click", resetButtonHandler, false);
@@ -9,12 +13,9 @@ document.body.onload = function main() {
   newImageHander.addEventListener("click", newImageHandler, false);
 }
 
-function resetButtonHandler() {
-
-}
-
 function newImageHandler() {
-
+  imageIndex++;
+  sendBaseImage();
 }
 
 function usernameSelector() {
@@ -37,32 +38,59 @@ function usernameSelector() {
 }
 
 function updateLocation() {
-  var location
   var element = document.querySelector("#instagram-location");
-  element.innerText = location;
+  getDbJson().then((json) => {
+    element.innerText = json[imageIndex].city_name;
+  })
 }
 
-function updateInstagramImage() {
-  var image = document.querySelector("#instagram-image");
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/results/images");
-  xhr.onload = function () {
-    if (xhr.status == 200) {
-      console.log(xhr.responseText);
-      console.log("Request success");
+function sendBaseImage() {
+  getDbJson().then((json) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/deepfake");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        console.log("Request success");
+        console.log(xhr.responseText);
+      }
     }
-  }
-  xhr.onabort = function () {
-    console.log("Request aborted");
-  }
-  xhr.timeout = 200;
-  xhr.ontimeout = function () {
-    console.log("Request timeout");
-  }
-  xhr.onerror = function () {
-    console.log("Error with request");
-  }
-  xhr.send();
+    xhr.onabort = function () {
+      console.log("Request aborted");
+    }
+    xhr.timeout = 2000;
+    xhr.ontimeout = function () {
+      console.log("Request timeout");
+    }
+    xhr.onerror = function () {
+      console.log("Error with request");
+    }
+    xhr.send(JSON.stringify(json[imageIndex]));
+  });
+}
+
+function getDbJson() {
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/results/images");
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        console.log("Request success");
+        resolve(JSON.parse(xhr.responseText));
+      }
+    }
+    xhr.onabort = function () {
+      reject("Request aborted");
+    }
+    xhr.timeout = 200;
+    xhr.ontimeout = function () {
+      reject("Request timeout");
+    }
+    xhr.onerror = function () {
+      reject("Error with request");
+    }
+    xhr.send();
+  })
 }
 
 

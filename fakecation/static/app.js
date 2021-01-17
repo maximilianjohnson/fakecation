@@ -47,14 +47,14 @@ function loadMap() {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onload = function () {
       if (xhr.status == 200) {
-        console.log(xhr.responseText);
         console.log("Request success");
+        console.log(xhr.responseText);
       }
     }
     xhr.onabort = function () {
       console.log("Request aborted");
     }
-    xhr.timeout = 200;
+    xhr.timeout = 2000;
     xhr.ontimeout = function () {
       console.log("Request timeout");
     }
@@ -65,6 +65,31 @@ function loadMap() {
   }
 
   mymap.on('click', onMapClick);
+}
+
+function getDbJson() {
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/latlong");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        console.log("Request success");
+        resolve(xhr.responseText);
+      }
+    }
+    xhr.onabort = function () {
+      reject("Request aborted");
+    }
+    xhr.timeout = 2000;
+    xhr.ontimeout = function () {
+      reject("Request timeout");
+    }
+    xhr.onerror = function () {
+      reject("Error with request");
+    }
+    xhr.send(JSON.stringify(Latlong));
+  })
 }
 
 function loadFilePond() {
