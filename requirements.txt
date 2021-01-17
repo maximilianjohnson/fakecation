@@ -1,10 +1,10 @@
 appdirs==1.4.4
-apturl==0.5.2
 bcrypt==3.1.7
 blinker==1.4
 branca==0.4.2
 cachelib==0.1.1
 certifi==2020.12.5
+cffi==1.14.4
 chardet==4.0.0
 click==7.1.2
 cycler==0.10.0
@@ -20,6 +20,7 @@ idna==2.10
 itsdangerous==1.1.0
 Jinja2==2.11.2
 kiwisolver==1.3.1
+lazr.uri==1.0.5
 MarkupSafe==1.1.1
 matplotlib==3.2.0
 numpy==1.19.5
@@ -28,6 +29,7 @@ opencv-python==4.5.1.48
 pandas==1.2.0
 Pillow==8.1.0
 psycopg2==2.8.6
+pycparser==2.20
 pyparsing==2.4.7
 python-dateutil==2.8.1
 pytz==2020.5
@@ -35,8 +37,6 @@ requests==2.25.1
 six==1.15.0
 SQLAlchemy==1.3.22
 urllib3==1.26.2
-usb-creator==0.3.7
-virtualenv==20.3.1
 wadllib==1.3.3
 Werkzeug==1.0.1
 xlrd==2.0.1

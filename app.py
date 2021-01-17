@@ -136,5 +136,23 @@ def index():
     detect_face.deep_fake("","")
     return render_template("index.html")
 
+@app.route('/api/', methods=["POST"])
+def read_img():
+    data = request.get_data()
+    try:
+        path = './tmp/1'
+        os.mkdir(path)
+    except OSError:
+        print ("Creation of the directory %s failed" % path)
+    else:
+        print ("Successfully created the directory %s " % path)
+
+    image = Image.open(io.BytesIO(data))
+    image.save('./tmp/1/my-file.png', "PNG")
+
+    resp = Response("Foo bar baz")
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
 if __name__ == "__main__":
     app.run()

@@ -15,7 +15,7 @@ def results():
 
 
 @app.route('/api/', methods=["POST"])
-def hello():
+def read_img():
     data = request.get_data()
     try:
         path = './tmp/1'
