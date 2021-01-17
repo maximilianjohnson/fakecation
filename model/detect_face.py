@@ -35,8 +35,7 @@ def show_images(img1, img2, title=""):
 def overlay_face(rep_tri, tri, rep_img, img):
     dst = rep_img.copy()
     for face in rep_tri:
-        rep = face 
-        triangles = tri
+        rep = face triangles = tri
         for i in range(len(triangles)):
             t = np.array(rep[i]).astype(np.int32)
             pt1 = (t[0], t[1])
@@ -90,7 +89,7 @@ def deep_fake(replace_url, face_url):
         face_replace_image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     except Exception as e:
         print(e)
-        face_replace_image = cv2.imread('./model/test2.jpeg')
+        face_replace_image = cv2.imread('./test2.jpeg')
 
     try: 
         resp = req.urlopen(face_url)
@@ -99,7 +98,7 @@ def deep_fake(replace_url, face_url):
 
     except Exception as e:
         print(e)
-        face_img = cv2.imread('./model/me.png')
+        face_img = cv2.imread('./me.png')
 
     show_images(face_replace_image, face_img)
     
