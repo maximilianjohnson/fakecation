@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <!-- {{ url_for('static', filename='style.css') }} -->
+  <link rel="stylesheet" href="../static/style.css">
+
+  <!-- Leaflet CDNs -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+
+  <!-- Filepond CDNs -->
+  <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+  <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+  <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+  <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+
+  <title>FAKEcation</title>
+</head>
+
+<body>
+  <div id="menu-bar">
+    <h2 class="title" id="title-fake">FAKE</h2>
+    <h2 class="title" id="title-cation">CATION</h2>
+  </div>
+  <div id="map-container">
+    <div id="mapid"></div>
+  </div>
+  <div id="upload-container">
+    <input id="filepond" type="file">
+  </div>
+  <div class="button-container">
+    <button id="confirm-button" type="button">FAKE!</button>
+  </div>
+</body>
+<!-- {{url_for('static', filename='app.js')}} -->
+<script src="../static/app.js"></script>
+
+</html>
