@@ -1,5 +1,5 @@
 from fakecation import *
-from flask import Flask, render_template, url_for, redirect, session
+from flask import Flask, render_template, url_for, redirect, session, Response, request
 import pandas as pd
 from pandas import DataFrame
 import numpy as np
@@ -10,9 +10,9 @@ from sqlalchemy import create_engine, update
 from sqlalchemy.orm import sessionmaker
 import sys
 
-sys.path.insert(0, "model/detect_face.py")
+#sys.path.insert(0, "model/detect_face.py")
 
-from model import detect_face
+#from model import detect_face
 
 db = SQLAlchemy()
 
@@ -134,28 +134,56 @@ def index():
     #new_df = query_db_by_coords(39,-9,range=5)
     #json_db = generate_json(new_df)
 
-    detect_face.deep_fake("","")
+    #detect_face.deep_fake("","")
     return render_template("index.html")
 
 @app.route("/results")
 def results():
     return render_template("results.html")
 
-@app.route("/images", methods=["GET"])
-def getImage():
-    json = {
-        "id": 2805,
-        "latitude": 50.0613279735,
-        "longitude": 19.9379429269,
-        "country_id": "PL",
-        "country_name": "Poland",
-        "city_name": "Krak\u00f3w",
-        "number": 1,
-        "gender": "0",
-        "filepath": "",
-        "distance": 8.1359612701
-    }
-    return json
+@app.route("/results/images", methods=["POST", "GET"])
+def images():
+    jsonresp = {
+    "id": 2805,
+    "latitude": 50.0613279735,
+    "longitude": 19.9379429269,
+    "country_id": "PL",
+    "country_name": "Poland",
+    "city_name": "Krak\u00f3w",
+    "number": 1,
+    "gender": "0",
+    "filepath": "",
+    "distance": 8.1359612701
+  }
+
+    return jsonresp
+    
+@app.route("/latlong", methods=["GET", "POST"])
+def latlong() :
+    #content=request.json
+    if request.method == "POST":
+        location = request.json
+        print(location["lat"])
+    
+    return "ehllo"
+
+@app.route('/api/', methods=["POST"])
+def read_img():
+    data = request.get_data()
+    try:
+        path = './tmp/1'
+        os.mkdir(path)
+    except OSError:
+        print ("Creation of the directory %s failed" % path)
+    else:
+        print ("Successfully created the directory %s " % path)
+
+    image = Image.open(io.BytesIO(data))
+    image.save('./tmp/1/my-file.png', "PNG")
+
+    resp = Response("Foo bar baz")
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 if __name__ == "__main__":
     app.run()

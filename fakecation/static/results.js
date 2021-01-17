@@ -45,10 +45,10 @@ function updateLocation() {
 function updateInstagramImage() {
   var image = document.querySelector("#instagram-image");
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/images");
+  xhr.open("GET", "/results/images");
   xhr.onload = function () {
-    if (x.status == 200) {
-      console.log(x.responseText);
+    if (xhr.status == 200) {
+      console.log(xhr.responseText);
       console.log("Request success");
     }
   }
