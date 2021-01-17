@@ -44,6 +44,25 @@ function updateLocation() {
 
 function updateInstagramImage() {
   var image = document.querySelector("#instagram-image");
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/results/images");
+  xhr.onload = function () {
+    if (xhr.status == 200) {
+      console.log(xhr.responseText);
+      console.log("Request success");
+    }
+  }
+  xhr.onabort = function () {
+    console.log("Request aborted");
+  }
+  xhr.timeout = 200;
+  xhr.ontimeout = function () {
+    console.log("Request timeout");
+  }
+  xhr.onerror = function () {
+    console.log("Error with request");
+  }
+  xhr.send();
 }
 
 

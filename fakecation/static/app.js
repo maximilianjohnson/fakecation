@@ -18,29 +18,6 @@ function confirmButtonHandler() {
   console.log("Data confirmed:");
   console.log(Latlong);
   console.log(UserImage);
-
-  // get request to results
-
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "/latlong");
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onload = function () {
-    if (x.status == 200) {
-      console.log(x.responseText);
-      console.log("Request success");
-    }
-  }
-  xhr.onabort = function () {
-    console.log("Request aborted");
-  }
-  xhr.timeout = 200;
-  xhr.ontimeout = function () {
-    console.log("Request timeout");
-  }
-  xhr.onerror = function () {
-    console.log("Error with request");
-  }
-  xhr.send(JSON.stringify(Latlong));
 }
 
 function loadMap() {
@@ -62,8 +39,29 @@ function loadMap() {
       .setLatLng(e.latlng)
       .setContent("Fake your vacation here!")
       .openOn(mymap);
-    console.log("New location added: " + e.latlng);
     Latlong = e.latlng;
+    console.log("New location added: " + Latlong);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/latlong");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        console.log(xhr.responseText);
+        console.log("Request success");
+      }
+    }
+    xhr.onabort = function () {
+      console.log("Request aborted");
+    }
+    xhr.timeout = 200;
+    xhr.ontimeout = function () {
+      console.log("Request timeout");
+    }
+    xhr.onerror = function () {
+      console.log("Error with request");
+    }
+    xhr.send(JSON.stringify(Latlong));
   }
 
   mymap.on('click', onMapClick);
