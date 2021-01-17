@@ -1,4 +1,4 @@
-import cv2 
+import cv2
 import urllib.request as req
 import sys
 import numpy as np
@@ -19,12 +19,12 @@ def draw_delaunay(img, subdiv, delaunay_color ) :
         pt3 = (t[4], t[5])
 
        # if rect_contains(r, pt1) and rect_contains(r, pt2) and rect_contains(r, pt3) :
-        cv2.line(img, pt1, pt2, delaunay_color, 1) 
-        cv2.line(img, pt2, pt3, delaunay_color, 1) 
+        cv2.line(img, pt1, pt2, delaunay_color, 1)
+        cv2.line(img, pt2, pt3, delaunay_color, 1)
         cv2.line(img, pt3, pt1, delaunay_color, 1)
 
 def show_images(img1, img2, title=""):
-    f, axarr = plt.subplots(2,1) 
+    f, axarr = plt.subplots(2,1)
     axarr[0].axis("off")
     axarr[1].axis("off")
     axarr[0].imshow(img1, cmap="gray")
@@ -35,7 +35,8 @@ def show_images(img1, img2, title=""):
 def overlay_face(rep_tri, tri, rep_img, img):
     dst = rep_img.copy()
     for face in rep_tri:
-        rep = face triangles = tri
+        rep = face
+        triangles = tri
         for i in range(len(triangles)):
             t = np.array(rep[i]).astype(np.int32)
             pt1 = (t[0], t[1])
@@ -59,7 +60,7 @@ def overlay_face(rep_tri, tri, rep_img, img):
             for i in range(0, 3):
                 rect[i] = [rect[i][0]-r[0], rect[i][1]-r[1]]
                 rect2[i] = [rect2[i][0]-r2[0], rect2[i][1]-r2[1]]
-            
+
             cv2.fillConvexPoly(mask, np.int32(rect), (1, 1, 1), 16, 0);
             #affine matrix
             M = cv2.getAffineTransform(rect2, rect)
@@ -82,89 +83,89 @@ def overlay_face(rep_tri, tri, rep_img, img):
 def deep_fake(replace_url, face_url):
     img1 = "replace.jpg"
     img2 = "face.jpg"
-    
+
     try:
         resp = req.urlopen(replace_url)
         image = np.asarray(bytearray(resp.read()), dtype = np.uint8)
         face_replace_image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     except Exception as e:
         print(e)
-        face_replace_image = cv2.imread('./test2.jpeg')
+        face_replace_image = cv2.imread('./model/test2.jpeg')
 
-    try: 
+    try:
         resp = req.urlopen(face_url)
         image = np.asarray(bytearray(resp.read()), dtype=np.uint8)
         face_img = cv2.imdecode(image, cv2.IMREAD_COLOR)
 
     except Exception as e:
         print(e)
-        face_img = cv2.imread('./me.png')
+        face_img = cv2.imread('./model/me.png')
 
     show_images(face_replace_image, face_img)
-    
+
     image_rgb = cv2.cvtColor(face_replace_image, cv2.COLOR_BGR2RGB)
     face_rgb = cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB)
-    
+
     # set dimension for cropping image
     x, y, width, depth = 50, 200, 950, 500
-    
+
     rep_cropped = image_rgb
     face_cropped = face_rgb
 
     rep_final = rep_cropped.copy()
     rep_original = rep_cropped.copy()
     face_final = face_cropped.copy()
-    
+
     # create a copy of the cropped image to be used later
     image_template = rep_cropped.copy()
     face_template = face_cropped.copy()
-    
+
     # convert image to Grayscale
     image_gray = cv2.cvtColor(rep_cropped, cv2.COLOR_BGR2GRAY)
     face_gray = cv2.cvtColor(face_template, cv2.COLOR_BGR2GRAY)
-    
+
     # remove axes and show image
 
     #show_images(image_gray, face_gray, "starting images")
-    
+
     haarcascade = "./model/haarcascade_frontalface_alt2.xml"
-    
+
     detector = cv2.CascadeClassifier(haarcascade)
-    
+
     # Detect faces using the haarcascade classifier on the "grayscale image"
     faces_replace = detector.detectMultiScale(image_gray)
     faces = detector.detectMultiScale(face_gray)
-    
+
     for face in faces:
     #     save the coordinates in x, y, w, d variables
         (x,y,w,d) = face
         # Draw a white coloured rectangle around each face using the face's coordinates
-        # on the "image_template" with the thickness of 2 
+        # on the "image_template" with the thickness of 2
         cv2.rectangle(face_template, (x,y), (x+w, y+d), (255, 0, 0), 2)
     for face in faces_replace:
         (x,y,w,d) = face
         # Draw a white coloured rectangle around each face using the face's coordinates
-        # on the "image_template" with the thickness of 2 
+        # on the "image_template" with the thickness of 2
         cv2.rectangle(image_template, (x,y), (x+w, y+d), (255, 0, 0), 2)
-    
-   
+
+
 
     #show_images(image_template, face_template, "faces")
-    
+
     LBFmodel = "./model/lbfmodel.yaml"
-    
+
     landmark_detector  = cv2.face.createFacemarkLBF()
     landmark_detector.loadModel(LBFmodel)
-    
+
     # Detect landmarks on "image_gray"
     _, landmarks_replace = landmark_detector.fit(image_gray, faces_replace)
     _, landmarks = landmark_detector.fit(face_gray, faces)
-    
+
     rep_hulls_img = rep_cropped.copy()
     hulls_img = face_cropped.copy()
 
     #get hulls from facial landmarks
-    face_hulls = [] 
+    face_hulls = []
     for landmark in landmarks:
         hull = cv2.convexHull(landmark[0], returnPoints = False)
         hull = np.array(hull, dtype=np.int32).squeeze()
@@ -175,7 +176,7 @@ def deep_fake(replace_url, face_url):
         hull = cv2.convexHull(landmark[0], returnPoints = False)
         hull = np.array(hull, dtype=np.int32).squeeze()
         replace_hulls.append(hull)
-    
+
     rep_tri_img = rep_cropped.copy()
     tri_img = face_cropped.copy()
 
@@ -190,7 +191,7 @@ def deep_fake(replace_url, face_url):
     for i in face_hulls:
         (x,y) = (np.float32(landmarks[0][0][i]))
         retrival[(tri.insert((x,y)))] = i
-    draw_delaunay(tri_img, tri, (255,0,0)) 
+    draw_delaunay(tri_img, tri, (255,0,0))
 
     triangles = tri.getTriangleList();
 
@@ -206,14 +207,14 @@ def deep_fake(replace_url, face_url):
             cur_tri.append(coord)
         rep_triangles.append(cur_tri)
 
-    final = overlay_face(rep_triangles, triangles, rep_final, face_final)    
+    final = overlay_face(rep_triangles, triangles, rep_final, face_final)
 
 
     size_x, size_y = len(final), len(final[0]);
     mask = np.zeros((size_x, size_y, 3), dtype = np.uint8)
 
     cv2.fillConvexPoly(mask, np.int32(landmarks_replace[0][0][face_hulls]), (255,255,255), 16, 0)
-    
+
     x,y = landmarks_replace[0][0][29]
     center = (x,y)
 
@@ -228,4 +229,4 @@ if __name__ == '__main__':
     if(len(sys.argv) < 3 or len(sys.argv) > 3):
         raise ValueError('need 2 url arguments')
 
-    deep_fake(sys.argv[1], sys.argv[2]) 
+    #deep_fake(sys.argv[1], sys.argv[2])

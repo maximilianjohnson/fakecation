@@ -8,6 +8,11 @@ import psycopg2
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, update
 from sqlalchemy.orm import sessionmaker
+import sys
+
+sys.path.insert(0, "model/detect_face.py")
+
+from model import detect_face
 
 db = SQLAlchemy()
 
@@ -125,8 +130,10 @@ def generate_url_list(df):
 
 @app.route("/")
 def index():
-    new_df = query_db_by_coords(39,-9,range=5)
-    json_db = generate_json(new_df)
+    #new_df = query_db_by_coords(39,-9,range=5)
+    #json_db = generate_json(new_df)
+
+    detect_face.deep_fake("","")
     return render_template("index.html")
 
 if __name__ == "__main__":

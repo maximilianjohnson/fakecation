@@ -1,6 +1,4 @@
 *.py[co]
 env/
 .cache/
-populate_db.py
-populate_postgres.py
-scrapers
+
