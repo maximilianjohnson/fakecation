@@ -9,6 +9,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, update
 from sqlalchemy.orm import sessionmaker
 import sys
+import PIL.Image as Image
+import io
+import os
 
 sys.path.insert(0, "model/detect_face.py")
 
@@ -134,7 +137,7 @@ def index():
     #new_df = query_db_by_coords(39,-9,range=5)
     #json_db = generate_json(new_df)
 
-    detect_face.deep_fake("","")
+    #detect_face.deep_fake("","")
     return render_template("index.html")
 
 @app.route("/results")
@@ -169,7 +172,6 @@ def latlong() :
 
 @app.route('/api/', methods=["POST"])
 def read_img():
-    data = request.get_data()
     try:
         path = './tmp/1'
         os.mkdir(path)
@@ -178,12 +180,16 @@ def read_img():
     else:
         print ("Successfully created the directory %s " % path)
 
-    image = Image.open(io.BytesIO(data))
-    image.save('./tmp/1/my-file.png', "PNG")
+    img = (request.files["filepond"])
+    file_name = img.filename
+    prefix = file_name.split(".") 
+    print(prefix)
+    image = Image.open(img)
+    image.save(path + "/test_img", prefix[1])
 
     resp = Response("Foo bar baz")
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
