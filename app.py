@@ -220,7 +220,7 @@ def deep_fake():
         path = detect_face.deep_fake(url, './tmp/1/test_img')
         swap_url = upload_image(path)
     except:
-        swap_url = "https://i.imgur.com/58DfWzF.jpg"
+        pass
     print(swap_url)
     return Response(swap_url)
 
