@@ -10,6 +10,7 @@ document.body.onload = function main() {
 }
 
 function loadMap() {
+  // initializing map
   var mymap = L.map('mapid').setView([40, -0.33], 2);
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -19,8 +20,9 @@ function loadMap() {
     zoomOffset: -1,
     accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
   }).addTo(mymap);
-  var popup = L.popup();
 
+  // initializing popup and click event on map
+  var popup = L.popup();
   function onMapClick(e) {
     popup
       .setLatLng(e.latlng)
@@ -54,6 +56,7 @@ function loadFilePond() {
   pond.setOptions({
     maxFiles: 1,
     required: true,
+    server: '/upload'
   });
 }
 
@@ -68,6 +71,8 @@ function confirmButtonHandler() {
   console.log(Latlong);
   console.log(UserImage);
 }
+
+
 
 
 //For selecting multiple locations
