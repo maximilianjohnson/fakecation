@@ -1,6 +1,7 @@
 var Latlong = {};
 var UserImage = {};
 
+
 document.body.onload = function main() {
   loadMap();
   loadFilePond();
@@ -89,7 +90,7 @@ function loadFilePond() {
   pond.setOptions({
     maxFiles: 1,
     required: true,
-    server: '/upload'
+    server: 'api/'
   });
 }
 
