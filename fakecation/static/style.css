@@ -46,7 +46,7 @@ html, body {
 }
 
 .result-button {
-  width: 180px;
+  width: 150px;
   margin: 0 10px;
 }
 
@@ -139,6 +139,8 @@ html, body {
 #instagram-image {
   margin: 10px auto;
   width: 400px;
+  height: 400px;
+  object-fit: cover;
 }
 
 #instagram-icons {

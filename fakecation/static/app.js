@@ -4,7 +4,6 @@ var UserImage = {};
 document.body.onload = function main() {
   loadMap();
   loadFilePond();
-  updateInstagramImage();
 
   var confirmButton = document.querySelector("#confirm-button");
   confirmButton.addEventListener("click", confirmButtonHandler, false);
