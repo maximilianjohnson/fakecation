@@ -152,8 +152,9 @@ def read_img():
     img = (request.files["filepond"])
     file_name = img.filename
     prefix = file_name.split(".") 
+    print(prefix)
     image = Image.open(img)
-    image.save(path + "test_img", prefix[1])
+    image.save(path + "/test_img", prefix[1])
 
     resp = Response("Foo bar baz")
     resp.headers['Access-Control-Allow-Origin'] = '*'
