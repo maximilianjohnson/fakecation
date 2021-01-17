@@ -1,0 +1,150 @@
+html, body {
+  background-color: rgb(231, 224, 224);
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans";
+}
+
+button {
+  background-color: #63B0CA;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  padding: 15px 32px;
+}
+
+button:hover {
+  background-color: #5ea6be;
+}
+
+button:active {
+  transform: translateY(0.5px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#delete-marker {
+  padding: 10px 25px;
+  font-size: 16px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
+}
+
+#delete-marker:active {
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
+}
+
+.button-container {
+  margin: 20px;
+  text-align: center;
+}
+
+.result-button {
+  width: 180px;
+  margin: 0 10px;
+}
+
+#menu-bar {
+  background: url(https://wallpaperaccess.com/full/2209824.jpg);
+  height: 110px;
+  text-align: center;
+  padding-top: 40px;
+  
+}
+
+.title {
+  color: #FFFFF3;
+  text-align: center;
+  font-size: 45px;
+  margin: 0;
+  font-weight: 100;
+  display: inline;
+}
+
+#title-fake {
+  font-weight: 900;
+}
+
+#map-container {
+  width: calc(100% - 120px);
+  background-color: #566270;
+  margin: 60px auto;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 20px #acacac;
+}
+
+#mapid { 
+  height: 380px; 
+  border-radius: 7px;
+}
+
+#upload-container {
+  width: 300px;
+  background-color: #566270;
+  margin: 60px auto;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 20px #acacac;
+}
+
+
+
+#instagram-container {
+  background-color: white;
+  height: 600px;
+  width: 400px;
+  margin: 60px auto 0px;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 5px 5px 20px #acacac;
+}
+
+#instagram-header {
+  display: flex;
+}
+
+#user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+#user-info {
+  display: inline;
+  line-height: 0;
+  margin-left: 10px;
+}
+
+#instagram-username {
+  font-size: 17px;
+}
+
+#instagram-location {
+  font-size: 14px;
+  color: #4d4d4d;
+}
+
+#instagram-image {
+  margin: 10px auto;
+  width: 400px;
+}
+
+#heart {
+  height: 25px;
+}
+
+#comment {
+  margin: 0px 10px;
+  width: 25px;
+  height: 25px;
+}
+
+#send {
+  width: 25px;
+}
