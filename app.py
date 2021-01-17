@@ -1,8 +1,33 @@
 from fakecation import *
 from flask import Flask, render_template, url_for, redirect, session
 import pandas as pd
+from pandas import DataFrame
 import numpy as np
 from math import radians
+import psycopg2
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, update
+from sqlalchemy.orm import sessionmaker
+
+db = SQLAlchemy()
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/fakecation'
+app.config['SECRET_KEY'] = 'thisissecret'
+engine = create_engine('postgresql://postgres:password@localhost/fakecation')
+db = SQLAlchemy(app)
+
+class dbFormat(db.Model):
+    __tablename__="images"
+    id = db.Column(db.Integer, primary_key = True)
+    latitude = db.Column(db.Integer)
+    longitude  = db.Column(db.Integer)
+    country_id = db.Column(db.String(64))
+    country_name = db.Column(db.String(64))
+    city_name = db.Column(db.String(64))
+    number = db.Column(db.Integer)
+    gender = db.Column(db.String(64))
+    filepath = db.Column(db.String(512))
 
 def calculate_distance(lat1, lon1, lat2, lon2):
     """Calculates distance between two geographic coordinates using the Haversine formula
@@ -38,74 +63,71 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
     return distance
 
-# def query_db_by_coords(conn,lat,lon,range):
-#     """ Queries database for entries with latitudes and longitudes both within lat,lon +/- range
-#
-#         Parameters:
-#             conn: database object (connection assumed to already be open)
-#             lat: float
-#                 target latitude
-#             lon: float
-#                 target longitude
-#             range: int
-#                 the allowable deviation in latitude and longitude
-#
-#         Output:
-#             df: pandas.DataFrame
-#                 dataframe containing the results of query
-#     """
-#     c = conn.cursor()
-#
-#     imgs_df = pd.read_sql_query("SELECT * FROM images WHERE latitude BETWEEN ? and ? AND longitude BETWEEN ? and ?", conn, params=(lat-range, lat+range, lon-range,lon+range))
-#     #imgs_df = pd.read_sql_query("SELECT * from images",conn)
-#     df = add_distance_to_df(imgs_df,lat, lon)
-#
-#     return df
-#
-#
-# def add_distance_to_df(df, lat, lon):
-#     """ Returns dataframe object containing queries of 10 images cloest to target
-#         location
-#
-#      Parameters:
-#        df: pandas.DataFrame
-#             dataframe containing results from SQL query
-#        lat: float
-#             target latitude
-#        lon: float
-#             target longitude
-#
-#      Output: dataframe containing 10 nearest images based on Haversine distance
-#      """
-#
-#     df["distance"] = calculate_distance(lat,lon,df["latitude"],df["longitude"])
-#
-#     return df.sort_values("distance").iloc[0:10, 0: ]
-#
-# def generate_json(df):
-#     """ Produces JSON representation of dataframe
-#
-#     Parameters:
-#         df: pandas.DataFrame
-#             dataframe to be converted
-#
-#     Output:
-#         df_json: string
-#             string representation of df in JSON format
-#     """
-#     return df.to_json("data.json",'records')
+def query_db_by_coords(lat,lon,range=5):
+    """ Queries database for entries with latitudes and longitudes both within lat,lon +/- range
+        Parameters:
+            conn: database object (connection assumed to already be open)
+            lat: float
+                target latitude
+            lon: float
+                target longitude
+            range: int
+                the allowable deviation in latitude and longitude
+        Output:
+            df: pandas.DataFrame
+                dataframe containing the results of query
+    """
+    query_string = 'select * from "images" WHERE latitude BETWEEN {0} and {1} AND longitude BETWEEN {2} and {3} AND length(filepath) > 0'.format(lat-range, lat+range, lon-range, lon+range)
+    imgs_df = pd.read_sql_query(query_string, con=engine)
+    df = add_distance_to_df(imgs_df,lat,lon)
+    return df
+
+def add_distance_to_df(df, lat, lon):
+    """ Returns dataframe object containing queries of 10 images cloest to target
+        location
+     Parameters:
+       df: pandas.DataFrame
+            dataframe containing results from SQL query
+       lat: float
+            target latitude
+       lon: float
+            target longitude
+     Output: dataframe containing 10 nearest images based on Haversine distance
+     """
+
+    df["distance"] = calculate_distance(lat,lon,df["latitude"],df["longitude"])
+
+    return df.sort_values("distance").iloc[0:10, 0: ]
+
+def generate_json(df):
+    """ Produces JSON representation of dataframe
+    Parameters:
+        df: pandas.DataFrame
+            dataframe to be converted
+    Output:
+        df_json: string
+            string representation of df in JSON format
+    """
+    return df.to_json("data.json",'records')
+
+def generate_url_list(df):
+    """ Produces list of urls in df
+    Parameters:
+        df: pandas.DataFrame
+            dataframe to be converted
+    Output:
+        urls: <list> String
+            list of urls
+    """
+    df_list = df["filepath"].tolist()
+    df_list = list(filter(None, df_list))
+    return df_list
 
 @app.route("/")
 def index():
-    # cur = get_db().cursor()
+    new_df = query_db_by_coords(39,-9,range=5)
+    json_db = generate_json(new_df)
     return render_template("index.html")
 
 if __name__ == "__main__":
-
     app.run()
-    #
-    # with app.app_context():
-    #     conn = get_db()
-    #
-    # with app.app_context():
-    #     close_db()
