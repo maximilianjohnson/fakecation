@@ -104,6 +104,7 @@ def add_distance_to_df(df, lat, lon):
 
     return df.sort_values("distance").iloc[0:10, 0: ]
 
+@app.route('/images', methods=["GET"])
 def generate_json(df):
     """ Produces JSON representation of dataframe
     Parameters:
@@ -113,7 +114,7 @@ def generate_json(df):
         df_json: string
             string representation of df in JSON format
     """
-    return df.to_json("data.json",'records')
+    return df.to_json(orient='records')
 
 def generate_url_list(df):
     """ Produces list of urls in df
@@ -135,6 +136,26 @@ def index():
 
     detect_face.deep_fake("","")
     return render_template("index.html")
+
+@app.route("/results")
+def results():
+    return render_template("results.html")
+
+@app.route("/images", methods=["GET"])
+def getImage():
+    json = {
+        "id": 2805,
+        "latitude": 50.0613279735,
+        "longitude": 19.9379429269,
+        "country_id": "PL",
+        "country_name": "Poland",
+        "city_name": "Krak\u00f3w",
+        "number": 1,
+        "gender": "0",
+        "filepath": "",
+        "distance": 8.1359612701
+    }
+    return json
 
 if __name__ == "__main__":
     app.run()
