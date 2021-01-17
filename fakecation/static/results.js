@@ -2,8 +2,8 @@ var imageIndex = 0;
 
 document.body.onload = function main() {
   sendBaseImage();
-  updateInstagramImage();
   usernameSelector();
+  updateLocation();
 
 
   var resetButton = document.querySelector("#reset-button");
@@ -65,7 +65,7 @@ function sendBaseImage() {
     xhr.onerror = function () {
       console.log("Error with request");
     }
-    xhr.send(JSON.stringify(json[imageIndex]));
+    xhr.send(JSON.stringify(json[imageIndex].filepath));
   });
 }
 

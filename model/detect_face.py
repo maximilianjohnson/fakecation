@@ -156,6 +156,15 @@ def deep_fake(replace_url, face_path):
     rep_hulls_img = rep_cropped.copy()
     hulls_img = face_cropped.copy()
 
+    for landmark in landmarks:
+        for (x,y) in landmark[0]:
+            cv2.circle(hulls_img, (x,y), 1, (255, 0, 0))
+    for landmark in landmarks_replace:
+        for (x,y) in landmark[0]:
+            cv2.circle(rep_hulls_img, (x,y), 1, (255, 0, 0))
+
+    #show_images(rep_hulls_img, hulls_img)
+
     #get hulls from facial landmarks
     face_hulls = []
     for landmark in landmarks:
@@ -167,7 +176,7 @@ def deep_fake(replace_url, face_path):
     for landmark in landmarks_replace:
         hull = cv2.convexHull(landmark[0], returnPoints = False)
         hull = np.array(hull, dtype=np.int32).squeeze()
-        replace_hulls.append(hull)
+        replace_hulls.append(hull) 
 
     rep_tri_img = rep_cropped.copy()
     tri_img = face_cropped.copy()
@@ -207,17 +216,29 @@ def deep_fake(replace_url, face_path):
 
     cv2.fillConvexPoly(mask, np.int32(landmarks_replace[0][0][face_hulls]), (255,255,255), 16, 0)
 
-    x,y = np.int32(landmarks_replace[0][0][29])
-    center = (x,y)
+    points = landmarks_replace[0][0][replace_hulls[0]]
 
-    #show_images(final, mask)
+    M = cv2.moments(points)
+    cX = int(M["m10"] / M["m00"])
+    cY = int(M["m01"] / M["m00"])
+
+    center = (cX, cY)
+
+    mask_copy = mask.copy()
+
+    cv2.circle(mask_copy, center, 1, (255,0,0))
+    
+
+    #show_images(final, mask_copy)
     output = cv2.seamlessClone(final, rep_original, mask, center, cv2.NORMAL_CLONE)
 
-    cv2.imwrite('masked_img.jpg', cv2.cvtColor(output, cv2.COLOR_RGB2BGR))
+    final_file = cur_dir + '/../fakecation/static/assets/images/masked_img.jpg'  
+    cv2.imwrite(final_file, cv2.cvtColor(output, cv2.COLOR_RGB2BGR))
+    return final_file
 
 
 if __name__ == '__main__':
     if(len(sys.argv) < 3 or len(sys.argv) > 3):
-        deep_fake("","")
+        deep_fake("","./me.png")
     else:
         deep_fake(sys.argv[1], sys.argv[2])

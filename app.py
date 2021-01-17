@@ -12,6 +12,7 @@ import sys
 import PIL.Image as Image
 import io
 import os
+import shutil
 
 sys.path.insert(0, "model/detect_face.py")
 
@@ -146,9 +147,10 @@ def results():
 @app.route("/results/images", methods=["POST", "GET"])
 def images():
     jsonresp = ""
-    if session.get("jsonresp") != "" or not None:
+    if session.get("jsonresp") != "" or not session.get("jsonresp") :
         jsonresp = session.get("jsonresp")
 
+    print(jsonresp)
     return jsonresp
     
 @app.route("/latlong", methods=["GET", "POST"])
@@ -166,15 +168,6 @@ def latlong() :
     session["jsonresp"] = jsonresp
     return jsonresp
 
-@app.route("/deepfake", methods=["GET", "POST"])
-def deepfake():
-    jsonresp = ""
-    if request.method == "POST":
-        filepathURL = request.json
-        print(filepathURL)
-
-    return jsonresp
-
 @app.route('/api/', methods=["POST"])
 def read_img():
     try:
@@ -188,13 +181,35 @@ def read_img():
     img = (request.files["filepond"])
     file_name = img.filename
     prefix = file_name.split(".") 
-    print(prefix)
     image = Image.open(img)
-    image.save(path + "/test_img", prefix[1])
-
-    resp = Response("Foo bar baz")
+    img_path = path + "/test_img"
+    image.save(img_path, prefix[1])
+    resp = Response("1")
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
+
+@app.route('/api/', methods=["DELETE"])
+def delete_img():
+    folder = './tmp/1'
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
+    os.rmdir(folder)
+    return Response()
+
+@app.route('/deepfake', methods=["POST"])
+def deep_fake():
+    url = request.get_json()
+    path = detect_face.deep_fake(url, './tmp/1/test_img')
+    print(path)
+    return Response(path)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
