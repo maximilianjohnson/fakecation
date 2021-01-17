@@ -104,7 +104,6 @@ def add_distance_to_df(df, lat, lon):
 
     return df.sort_values("distance").iloc[0:10, 0: ]
 
-@app.route('/images', methods=["GET"])
 def generate_json(df):
     """ Produces JSON representation of dataframe
     Parameters:
@@ -143,29 +142,35 @@ def results():
 
 @app.route("/results/images", methods=["POST", "GET"])
 def images():
-    jsonresp = {
-    "id": 2805,
-    "latitude": 50.0613279735,
-    "longitude": 19.9379429269,
-    "country_id": "PL",
-    "country_name": "Poland",
-    "city_name": "Krak\u00f3w",
-    "number": 1,
-    "gender": "0",
-    "filepath": "",
-    "distance": 8.1359612701
-  }
+    jsonresp = ""
+    if session.get("jsonresp") != "" or not None:
+        jsonresp = session.get("jsonresp")
 
     return jsonresp
     
 @app.route("/latlong", methods=["GET", "POST"])
 def latlong() :
     #content=request.json
+    jsonresp = ""
     if request.method == "POST":
         location = request.json
-        print(location["lat"])
-    
-    return "ehllo"
+        print(location)
+        lat = location["lat"]
+        lon = location["lng"]
+        img_df = query_db_by_coords(lat,lon)
+        jsonresp = generate_json(img_df)
+
+    session["jsonresp"] = jsonresp
+    return jsonresp
+
+@app.route("/deepfake", methods=["GET", "POST"])
+def deepfake():
+    jsonresp = ""
+    if request.method == "POST":
+        filepathURL = request.json
+        print(filepathURL)
+
+    return jsonresp
 
 @app.route('/api/', methods=["POST"])
 def read_img():
