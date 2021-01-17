@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+  <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+  <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+  <title>FAKEcation</title>
+</head>
+
+<body>
+  <div id="menu-bar">
+    <h2 class="title" id="title-fake">FAKE</h2>
+    <h2 class="title" id="title-cation">CATION</h2>
+  </div>
+  <div id="map-container">
+    <div id="mapid"></div>
+  </div>
+  <div id="upload-container">
+    <input id="filepond" type="file">
+  </div>
+  <div id="button-container">
+    <button id="confirm-button" type="button">Confirm your phoniness</button>
+  </div>
+</body>
+
+<script src="{{url_for('static', filename='app.js')}}"></script>
+
+</html>

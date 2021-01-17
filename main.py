@@ -101,7 +101,7 @@ def generate_json(df):
 @app.route("/")
 def index():
     cur = get_db().cursor()
-    return render_template("base.html")
+    return render_template("index.html")
 
 if __name__ == "__main__":
 
@@ -110,14 +110,5 @@ if __name__ == "__main__":
     with app.app_context():
         conn = get_db()
 
-    #create_table(conn)
-    #insert_row(conn,100,125,20,2,"1,0","image123.jpg")
-
-    #get_images(get_db(),100, 100
-
-    img_df = query_db_by_coords(conn,50,20,20)
-    print(img_df)
-    print(calculate_distance(10,20,45,22))
-    generate_json(img_df)
     with app.app_context():
         close_db()
