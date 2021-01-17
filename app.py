@@ -12,9 +12,9 @@ from sqlalchemy.orm import sessionmaker
 db = SQLAlchemy()
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/fakecation'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://aaqbyjinuvxfdz:2f7e0c5ffb8b29b2e339a4b775730277ab29228630a4ad02f0d2303ce8b8167a@ec2-50-19-32-202.compute-1.amazonaws.com:5432/d1v6fidvqjq8nj'
 app.config['SECRET_KEY'] = 'thisissecret'
-engine = create_engine('postgresql://postgres:password@localhost/fakecation')
+engine = create_engine('postgres://aaqbyjinuvxfdz:2f7e0c5ffb8b29b2e339a4b775730277ab29228630a4ad02f0d2303ce8b8167a@ec2-50-19-32-202.compute-1.amazonaws.com:5432/d1v6fidvqjq8nj')
 db = SQLAlchemy(app)
 
 class dbFormat(db.Model):
