@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <!-- {{ url_for('static', filename='style.css') }} -->
-  <link rel="stylesheet" href="../static/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 
   <!-- Leaflet CDNs -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -35,7 +35,7 @@
     <input id="filepond" type="file">
   </div>
   <div class="button-container">
-    <button id="confirm-button" type="button">FAKE!</button>
+    <a class="btn" id="confirm-button" href="/results">FAKE!</a>
   </div>
 </body>
 <!-- {{url_for('static', filename='app.js')}} -->
