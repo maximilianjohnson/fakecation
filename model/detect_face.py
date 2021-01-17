@@ -101,8 +101,8 @@ def deep_fake(replace_url, face_path):
     # set dimension for cropping image
     x, y, width, depth = 50, 200, 950, 500
 
-    rep_cropped = image_rgb
-    face_cropped = face_rgb
+    rep_cropped = image_rgb[:len(image_rgb)-len(image_rgb)%3][:len(image_rgb[0])-len(image_rgb[0])%3]
+    face_cropped = face_rgb[:len(face_rgb)-len(face_rgb)%3][:len(face_rgb[0])-len(face_rgb)%3]
 
     rep_final = rep_cropped.copy()
     rep_original = rep_cropped.copy()
