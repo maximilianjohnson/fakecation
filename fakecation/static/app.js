@@ -1,5 +1,5 @@
 var Latlong = [];
-var UploadedFile = {};
+var UserImage = {};
 
 document.body.onload = function main() {
   loadMap();
@@ -33,6 +33,7 @@ function loadMap() {
     myMarker._id = id;
 
     let btn = document.createElement('button');
+    btn.setAttribute("id", "delete-marker");
     btn.innerText = 'Delete Marker';
     btn.onclick = function () {
       var new_markers = [];
@@ -47,6 +48,7 @@ function loadMap() {
           Latlong.splice(index, 1);
         }
       });
+      console.log("Marker removed at: " + coords);
     }
 
     myMarker.bindPopup(btn).openPopup();
@@ -69,8 +71,11 @@ function loadMap() {
 }
 
 function loadFilePond() {
+  FilePond.registerPlugin(FilePondPluginImagePreview);
   var inputElement = document.querySelector('#filepond');
-  var pond = FilePond.create(inputElement);
+  var pond = FilePond.create(inputElement, {
+    imagePreviewMaxHeight: 300,
+  });
 
   pond.on('addfile', (error, file) => {
     if (error) {
@@ -79,7 +84,7 @@ function loadFilePond() {
     }
     if (file) {
       console.log("File uploaded:", file.file.name);
-      UploadedFile = file;
+      UserImage = file;
     }
   });
 
@@ -90,15 +95,15 @@ function loadFilePond() {
 }
 
 function confirmButtonHandler() {
-  if (Object.keys(Latlong).length === 0 || Object.keys(UploadedFile).length === 0) {
+  if (Object.keys(Latlong).length === 0 || Object.keys(UserImage).length === 0) {
     console.log("Complete your shit boi");
     console.log(Latlong);
-    console.log(UploadedFile);
+    console.log(UserImage);
     return;
   }
   console.log("Data confirmed:");
   console.log(Latlong);
-  console.log(UploadedFile);
+  console.log(UserImage);
 }
 
 
