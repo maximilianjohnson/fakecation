@@ -13,6 +13,7 @@ import PIL.Image as Image
 import io
 import os
 import shutil
+from imgurpython import ImgurClient
 
 sys.path.insert(0, "model/detect_face.py")
 
@@ -132,6 +133,15 @@ def generate_url_list(df):
     df_list = list(filter(None, df_list))
     return df_list
 
+def upload_image(image):
+    """Uploads an image file to Imgur"""
+    client_id= "a99d1e81fecda64"
+    client_secret= "f15cffffa9a4dae824c3044fbb79078582a5d928"
+    client = ImgurClient(client_id, client_secret)
+
+    response = client.upload_from_path(image)
+    return response['link']
+
 @app.route("/")
 def index():
     #new_df = query_db_by_coords(39,-9,range=5)
@@ -152,7 +162,7 @@ def images():
 
     print(jsonresp)
     return jsonresp
-    
+
 @app.route("/latlong", methods=["GET", "POST"])
 def latlong() :
     #content=request.json
@@ -180,7 +190,7 @@ def read_img():
 
     img = (request.files["filepond"])
     file_name = img.filename
-    prefix = file_name.split(".") 
+    prefix = file_name.split(".")
     image = Image.open(img)
     img_path = path + "/test_img"
     image.save(img_path, prefix[1])
@@ -206,9 +216,13 @@ def delete_img():
 @app.route('/deepfake', methods=["POST"])
 def deep_fake():
     url = request.get_json()
-    path = detect_face.deep_fake(url, './tmp/1/test_img')
-    print(path)
-    return Response(path)
+    try:
+        path = detect_face.deep_fake(url, './tmp/1/test_img')
+        swap_url = upload_image(path)
+    except:
+        swap_url = "https://i.imgur.com/58DfWzF.jpg"
+    print(swap_url)
+    return Response(swap_url)
 
 
 if __name__ == "__main__":
