@@ -4,8 +4,6 @@ import pandas as pd
 import numpy as np
 from math import radians
 
-
-
 def calculate_distance(lat1, lon1, lat2, lon2):
     """Calculates distance between two geographic coordinates using the Haversine formula
 
@@ -40,75 +38,74 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
     return distance
 
-
-def query_db_by_coords(conn,lat,lon,range):
-    """ Queries database for entries with latitudes and longitudes both within lat,lon +/- range
-
-        Parameters:
-            conn: database object (connection assumed to already be open)
-            lat: float
-                target latitude
-            lon: float
-                target longitude
-            range: int
-                the allowable deviation in latitude and longitude
-
-        Output:
-            df: pandas.DataFrame
-                dataframe containing the results of query
-    """
-    c = conn.cursor()
-
-    imgs_df = pd.read_sql_query("SELECT * FROM images WHERE latitude BETWEEN ? and ? AND longitude BETWEEN ? and ?", conn, params=(lat-range, lat+range, lon-range,lon+range))
-    #imgs_df = pd.read_sql_query("SELECT * from images",conn)
-    df = add_distance_to_df(imgs_df,lat, lon)
-
-    return df
-
-
-def add_distance_to_df(df, lat, lon):
-    """ Returns dataframe object containing queries of 10 images cloest to target
-        location
-
-     Parameters:
-       df: pandas.DataFrame
-            dataframe containing results from SQL query
-       lat: float
-            target latitude
-       lon: float
-            target longitude
-
-     Output: dataframe containing 10 nearest images based on Haversine distance
-     """
-
-    df["distance"] = calculate_distance(lat,lon,df["latitude"],df["longitude"])
-
-    return df.sort_values("distance").iloc[0:10, 0: ]
-
-def generate_json(df):
-    """ Produces JSON representation of dataframe
-
-    Parameters:
-        df: pandas.DataFrame
-            dataframe to be converted
-
-    Output:
-        df_json: string
-            string representation of df in JSON format
-    """
-    return df.to_json("data.json",'records')
+# def query_db_by_coords(conn,lat,lon,range):
+#     """ Queries database for entries with latitudes and longitudes both within lat,lon +/- range
+#
+#         Parameters:
+#             conn: database object (connection assumed to already be open)
+#             lat: float
+#                 target latitude
+#             lon: float
+#                 target longitude
+#             range: int
+#                 the allowable deviation in latitude and longitude
+#
+#         Output:
+#             df: pandas.DataFrame
+#                 dataframe containing the results of query
+#     """
+#     c = conn.cursor()
+#
+#     imgs_df = pd.read_sql_query("SELECT * FROM images WHERE latitude BETWEEN ? and ? AND longitude BETWEEN ? and ?", conn, params=(lat-range, lat+range, lon-range,lon+range))
+#     #imgs_df = pd.read_sql_query("SELECT * from images",conn)
+#     df = add_distance_to_df(imgs_df,lat, lon)
+#
+#     return df
+#
+#
+# def add_distance_to_df(df, lat, lon):
+#     """ Returns dataframe object containing queries of 10 images cloest to target
+#         location
+#
+#      Parameters:
+#        df: pandas.DataFrame
+#             dataframe containing results from SQL query
+#        lat: float
+#             target latitude
+#        lon: float
+#             target longitude
+#
+#      Output: dataframe containing 10 nearest images based on Haversine distance
+#      """
+#
+#     df["distance"] = calculate_distance(lat,lon,df["latitude"],df["longitude"])
+#
+#     return df.sort_values("distance").iloc[0:10, 0: ]
+#
+# def generate_json(df):
+#     """ Produces JSON representation of dataframe
+#
+#     Parameters:
+#         df: pandas.DataFrame
+#             dataframe to be converted
+#
+#     Output:
+#         df_json: string
+#             string representation of df in JSON format
+#     """
+#     return df.to_json("data.json",'records')
 
 @app.route("/")
 def index():
-    cur = get_db().cursor()
+    # cur = get_db().cursor()
     return render_template("index.html")
 
 if __name__ == "__main__":
 
     app.run()
-
-    with app.app_context():
-        conn = get_db()
-
-    with app.app_context():
-        close_db()
+    #
+    # with app.app_context():
+    #     conn = get_db()
+    #
+    # with app.app_context():
+    #     close_db()
