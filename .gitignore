@@ -1,3 +1,4 @@
 *.py[co]
-env
+env/
 .cache/
+
