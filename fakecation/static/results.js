@@ -43,7 +43,7 @@ function updateLocation() {
 
 function setImage(swap_url) {
   var image = document.querySelector("#instagram-image");
-  image.src = "https://i.imgur.com/GpNvxgW.jpeg"
+  image.src = swap_url
 }
 
 function getFunkyImage() {
