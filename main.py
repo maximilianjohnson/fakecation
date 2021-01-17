@@ -98,6 +98,20 @@ def generate_json(df):
     """
     return df.to_json("data.json",'records')
 
+def generate_url_list(df):
+    """ Produces list of urls in df
+    Parameters:
+        df: pandas.DataFrame
+            dataframe to be converted
+
+    Output:
+        urls: <list> String
+            list of urls
+    """
+    df_list = df["filepath"].tolist()
+    df_list = list(filter(None, df_list))
+    return df_list
+
 @app.route("/")
 def index():
     cur = get_db().cursor()
@@ -119,5 +133,6 @@ if __name__ == "__main__":
     print(img_df)
     print(calculate_distance(10,20,45,22))
     generate_json(img_df)
+    print(generate_url_list(img_df))
     with app.app_context():
         close_db()
