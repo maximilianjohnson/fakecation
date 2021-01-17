@@ -40,7 +40,7 @@ button:active {
 }
 
 .button-container {
-  margin: 20px;
+  margin: 30px;
   text-align: center;
 }
 
@@ -93,13 +93,11 @@ button:active {
   box-shadow: 5px 5px 20px #acacac;
 }
 
-
-
 #instagram-container {
   background-color: white;
-  height: 600px;
+  height: 500px;
   width: 400px;
-  margin: 60px auto 0px;
+  margin: 80px auto 0px;
   border-radius: 15px;
   padding: 20px;
   box-shadow: 5px 5px 20px #acacac;
@@ -107,6 +105,7 @@ button:active {
 
 #instagram-header {
   display: flex;
+  width: 400px;
 }
 
 #user-avatar {
@@ -130,8 +129,18 @@ button:active {
   color: #4d4d4d;
 }
 
+#options-icon {
+  height: 30px;
+  float: right;
+  margin-top: 10px;
+}
+
 #instagram-image {
   margin: 10px auto;
+  width: 400px;
+}
+
+#instagram-icons {
   width: 400px;
 }
 
@@ -147,4 +156,9 @@ button:active {
 
 #send {
   width: 25px;
+}
+
+#save {
+  width: 25px;
+  float: right;
 }
