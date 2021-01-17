@@ -41,11 +41,9 @@ function updateLocation() {
   })
 }
 
-function setImage() {
+function setImage(swap_url) {
   var image = document.querySelector("#instagram-image");
-  getFunkyImage().then(() => {
-    image.src = "/assets/images/masked_image.jpeg"
-  })
+  image.src = "https://i.imgur.com/GpNvxgW.jpeg"
 }
 
 function getFunkyImage() {
@@ -70,6 +68,7 @@ function getFunkyImage() {
     }
     xhr.send();
   }
+)};
 
 function sendBaseImage() {
       getDbJson().then((json) => {
@@ -80,12 +79,13 @@ function sendBaseImage() {
           if (xhr.status == 200) {
             console.log("Request success");
             console.log(xhr.responseText);
+            setImage(xhr.responseText);
           }
         }
         xhr.onabort = function () {
           console.log("Request aborted");
         }
-        xhr.timeout = 2000;
+        xhr.timeout = 10000;
         xhr.ontimeout = function () {
           console.log("Request timeout");
         }
@@ -93,8 +93,13 @@ function sendBaseImage() {
           console.log("Error with request");
         }
         xhr.send(JSON.stringify(json[imageIndex].filepath));
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            setImage(xhr.responseText);
+          }
+        };
       });
-    }
+    };
 
 function getDbJson() {
       return new Promise((resolve, reject) => {
@@ -119,6 +124,3 @@ function getDbJson() {
         xhr.send();
       })
     }
-
-
-
