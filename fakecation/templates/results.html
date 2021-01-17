@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <!-- {{ url_for('static', filename='style.css') }} -->
+  <link rel="stylesheet" href="../static/style.css">
+
+  <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" type="text/javascript"></script>
+
+  <!-- nanogallery2 -->
+  <link href="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/css/nanogallery2.min.css" rel="stylesheet"
+    type="text/css">
+  <script type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/jquery.nanogallery2.min.js"></script>
+
+  <title>FAKEcation</title>
+</head>
+
+<body>
+  <div id="menu-bar">
+    <h2 class="title" id="title-fake">FAKE</h2>
+    <h2 class="title" id="title-cation">CATION</h2>
+  </div>
+
+  <div id="instagram-container">
+    <div id="instagram-header">
+      <img
+        src="https://media1.popsugar-assets.com/files/thumbor/FgjdC5JQqt3RSfwOuN0cQ_0GdSs/117x227:1999x2109/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2020/05/29/777/n/1922398/7d8609955ed148d7766811.46842803_/i/Dave-Franco.jpg"
+        alt="Avatar" id="user-avatar">
+      <div id="user-info">
+        <p id="instagram-username">_dave</p>
+        <p id="instagram-location">Vancouver</p>
+      </div>
+    </div>
+    <img src="https://t4.ftcdn.net/jpg/02/07/87/79/360_F_207877921_BtG6ZKAVvtLyc5GWpBNEIlIxsffTtWkv.jpg" alt=""
+      id="instagram-image">
+    <div id="instagram-icons">
+      <img src="../static/assets/images/heart.png" alt="" id="heart">
+      <img src="../static/assets/images/comment.png" alt="" id="comment">
+      <img src="../static/assets/images/send.webp" alt="" id="send">
+    </div>
+
+  </div>
+
+  <div class="button-container">
+    <button class="result-button" id="new-image-button" type="button">New Image</button>
+    <button class="result-button" id="reset-button" type="button">Reset</button>
+  </div>
+
+</body>
+<script src="../static/app.js"></script>
+
+</html>
