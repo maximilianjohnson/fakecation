@@ -5,7 +5,7 @@ html, body {
   font-family: "Open Sans";
 }
 
-button {
+.btn {
   background-color: #63B0CA;
   border-radius: 10px;
   border: none;
@@ -20,16 +20,17 @@ button {
   padding: 15px 32px;
 }
 
-button:hover {
+.btn:hover {
   background-color: #5ea6be;
 }
 
-button:active {
+.btn:active {
   transform: translateY(0.5px);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
-#delete-marker {
+/* for multiple location functionality in leaflet */
+/* #delete-marker {
   padding: 10px 25px;
   font-size: 16px;
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
@@ -37,7 +38,7 @@ button:active {
 
 #delete-marker:active {
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
-}
+} */
 
 .button-container {
   margin: 30px;

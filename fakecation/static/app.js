@@ -1,12 +1,46 @@
-var Latlong;
+var Latlong = {};
 var UserImage = {};
 
 document.body.onload = function main() {
   loadMap();
   loadFilePond();
+  updateInstagramImage();
 
   var confirmButton = document.querySelector("#confirm-button");
   confirmButton.addEventListener("click", confirmButtonHandler, false);
+}
+
+function confirmButtonHandler() {
+  if (Object.keys(Latlong).length === 0 || Object.keys(UserImage).length === 0) {
+    alert("Enter your location and upload a photo!")
+    return;
+  }
+  console.log("Data confirmed:");
+  console.log(Latlong);
+  console.log(UserImage);
+
+  // get request to results
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/latlong");
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onload = function () {
+    if (x.status == 200) {
+      console.log(x.responseText);
+      console.log("Request success");
+    }
+  }
+  xhr.onabort = function () {
+    console.log("Request aborted");
+  }
+  xhr.timeout = 200;
+  xhr.ontimeout = function () {
+    console.log("Request timeout");
+  }
+  xhr.onerror = function () {
+    console.log("Error with request");
+  }
+  xhr.send(JSON.stringify(Latlong));
 }
 
 function loadMap() {
@@ -39,7 +73,7 @@ function loadFilePond() {
   FilePond.registerPlugin(FilePondPluginImagePreview);
   var inputElement = document.querySelector('#filepond');
   var pond = FilePond.create(inputElement, {
-    imagePreviewMaxHeight: 300,
+    imagePreviewMaxHeight: 100,
   });
 
   pond.on('addfile', (error, file) => {
@@ -60,17 +94,7 @@ function loadFilePond() {
   });
 }
 
-function confirmButtonHandler() {
-  if (Object.keys(Latlong).length === 0 || Object.keys(UserImage).length === 0) {
-    console.log("Complete your shit boi");
-    console.log(Latlong);
-    console.log(UserImage);
-    return;
-  }
-  console.log("Data confirmed:");
-  console.log(Latlong);
-  console.log(UserImage);
-}
+
 
 
 
