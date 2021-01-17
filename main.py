@@ -115,11 +115,11 @@ def generate_url_list(df):
 @app.route("/")
 def index():
     cur = get_db().cursor()
-    return render_template("base.html")
+    return render_template("index.html")
 
 if __name__ == "__main__":
 
-    app.run()
+    app.run(debug=True)
 
     with app.app_context():
         conn = get_db()
